@@ -16,12 +16,38 @@
     text-align: center;
 }
 
-.off {
-    display: none;
-}
-
 form {
     display: inline-flex;
     flex-direction: column;
     width: 40%;
+}
+
+.off {
+    display: none!important;
+}
+
+.modal-post {
+    background-color: rgba(0, 0, 0, 0.75);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.post-form {
+    background-color: white;
+    padding: 10px;
+}
+
+.post-image {
+    width: 300px;
 }
