@@ -1,5 +1,4 @@
-var context = []
-// TODO wieso nicht in data
+const context = {}
 
 document.querySelector('.login').querySelector('a').onclick = function (event) {
     event.preventDefault()
@@ -16,10 +15,10 @@ document.querySelector('.register').querySelector('a').onclick = function (event
 document.querySelector('.login').querySelector('form').onsubmit = function (event) {
     event.preventDefault()
 
-    var email = event.target.email.value
-    var password = event.target.password.value
+    const email = event.target.email.value
+    const password = event.target.password.value
 
-    var authenticated = authenticateUser(email, password)
+    const authenticated = authenticateUser(email, password)
 
     if (authenticated) {
         context.email = email
@@ -33,11 +32,11 @@ document.querySelector('.login').querySelector('form').onsubmit = function (even
 document.querySelector('.register').querySelector('form').onsubmit = function (event) {
     event.preventDefault()
 
-    var name = event.target.name.value
-    var email = event.target.email.value
-    var password = event.target.password.value
+    const name = event.target.name.value
+    const email = event.target.email.value
+    const password = event.target.password.value
 
-    var registered = registerUser(name, email, password)
+    const registered = registerUser(name, email, password)
 
     if (registered) {
      alert('shqipe')
@@ -63,10 +62,10 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
 document.querySelector('.welcome').querySelector('.modal-post').querySelector('.post-form').onsubmit = function (event) {
     event.preventDefault()
 
-    var picture = event.target.picture.value
-    var text = event.target.text.value
+    const picture = event.target.picture.value
+    const text = event.target.text.value
 
-    var created = createPost(context.email, picture, text)
+    const created = createPost(context.email, picture, text)
 
     if (created) {
         document.querySelector('.welcome').querySelector('.modal-post').classList.add('off')
@@ -80,25 +79,57 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
 function renderPosts() {
     document.querySelector('.welcome').querySelector('.home-posts').innerHTML = ''
 
-    var posts = retrievePosts(context.email)
+    const posts = retrievePosts(context.email)
 
-    for (var i = 0; i < posts.length; i++) {
-        var post = posts[i]
+    for (let i = 0; i < posts.length; i++) {
+        const post = posts[i]
 
-        var article = document.createElement('article')
+        const article = document.createElement('article')
 
-        var image = document.createElement('img')
+        const image = document.createElement('img')
         image.src = post.picture
         image.classList.add('post-image')
 
-        var paragraph = document.createElement('p')
+        const paragraph = document.createElement('p')
         paragraph.innerText = post.text
 
-        var time = document.createElement('time')
+        const time = document.createElement('time')
         time.innerText = post.date.toString()
 
-        article.append(image, paragraph, time)
+        const button = document.createElement('button')
+        button.innerText = 'modify'
+        button.onclick = function() {
+            document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
+            document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
+        }
+
+        article.append(image, paragraph, time, button)
 
         document.querySelector('.welcome').querySelector('.home-posts').append(article)
     }
+}
+
+document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.cancel').onclick = function(event) {
+    event.preventDefault()
+
+    document.querySelector('.welcome').querySelector('.modal-modify').classList.add('off')
+}
+
+document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').onsubmit = function(event) {
+    event.preventDefault()
+
+    const postId = event.target.postId.value
+    const picture = event.target.picture.value
+    const text = event.target.text.value
+
+    const modified = modifyPost(context.email, postId, picture, text)
+
+    if(!modified)
+        alert('modification failed')
+    else {
+        document.querySelector('.welcome').querySelector('.modal-modify').classList.add('off')
+
+        renderPosts()
+    }
+
 }
