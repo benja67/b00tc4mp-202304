@@ -56,18 +56,18 @@ function createPost(email, picture, text) {
     if (!foundUser)
         return false
     else {
-        var post = []
+        var post = {}
 
         let id
 
         if(!posts.length)
             id='post-1'
         else {
-            const last = posts.length[posts.length--]
+            const last = posts[posts.length - 1]
 
             const num = Number(last.id.slice(5))
 
-            id = 'post-' + (num++)
+            id = 'post-' + (num + 1)
         }
 
         post.id = id
@@ -118,7 +118,7 @@ function modifyPost(email, postId, picture, text) {
     if (!foundUser)
         return false
 
-    var foundPost
+    let foundPost
 
     for (let i = 0; i < posts.length; i++) {
         var post = posts[i]
@@ -137,5 +137,46 @@ function modifyPost(email, postId, picture, text) {
     foundPost.text = text
     foundPost.date = new Date
     // TODO wo push?
+    return true
+}
+
+function toggleLikePost(email, postId) {
+    let foundUser
+
+    for (let i = 0; i < users.length; i++) {
+        var user = users[i]
+
+        if (user.email === email) {
+            foundUser = user
+
+            break
+        }
+    }
+
+    if (!foundUser)
+        return false
+
+    let foundPost
+
+    for (let i = 0; i < posts.length; i++) {
+        var post = posts[i]
+
+        if (post.id === postId) {
+            foundPost = post
+
+            break
+        }
+    }
+
+    if (!foundPost)
+        return false
+
+    const index = foundPost.likes.indexOf(context.email)
+
+    if (index < 0)
+        foundPost.likes.push(email)
+    else 
+        foundPost.likes.splice(index, 1)
+    
     return true
 }

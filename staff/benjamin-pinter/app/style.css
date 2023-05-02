@@ -3,10 +3,18 @@
     background-color: rgb(255, 0, 0);
     text-align: center;
 }
+
 .login {
     border: 5px outset rgb(255, 0, 191);
     background-color: rgb(51, 255, 0);
     text-align: center;
+}
+
+a {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(255, 255, 0);
+    border: 5px outset rgb(0, 204, 255);
 }
 
 .welcome {

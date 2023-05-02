@@ -103,7 +103,26 @@ function renderPosts() {
             document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
         }
 
-        article.append(image, paragraph, time, button)
+        const buttonlike = document.createElement('button')
+        
+        if (post.likes.includes(context.email))
+            buttonlike.innerText = '🩵'
+        else
+            buttonlike.innerText = '🤍'
+
+        buttonlike.className = 'buttonlike'
+        buttonlike.onclick = function(event) {
+            event.preventDefault()
+        
+            toggleLikePost(context.email, post.id)
+        
+            if(toggleLikePost)
+                renderPosts()
+            else 
+                alert('failed to like the post!')
+        }
+
+        article.append(image, paragraph, time, button, buttonlike)
 
         document.querySelector('.welcome').querySelector('.home-posts').append(article)
     }
@@ -125,7 +144,7 @@ document.querySelector('.welcome').querySelector('.modal-modify').querySelector(
     const modified = modifyPost(context.email, postId, picture, text)
 
     if(!modified)
-        alert('modification failed')
+        alert('modification failed!')
     else {
         document.querySelector('.welcome').querySelector('.modal-modify').classList.add('off')
 
