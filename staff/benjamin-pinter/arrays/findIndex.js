@@ -14,3 +14,11 @@ const isLargeNumber = (element) => element > 13
 
 console.log(findIndex(array1, isLargeNumber))
 // Expected output: 3
+
+//case2
+const array2 = ["bauma","Nisse","landsmann"]
+
+const isLargeName = (element) => element.length > 6
+
+console.log(findIndex(array2, isLargeName))
+// Expected output: 2

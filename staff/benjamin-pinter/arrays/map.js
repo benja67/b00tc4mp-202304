@@ -1,9 +1,9 @@
-function map(array, callbackFn) {
-    var fr = []
+function map(array, callback) {
+    var mapped = []
     for (var i = 0; i < array.length ; i++)
-       fr[i] = callbackFn(array[i])
+       mapped[i] = callback(array[i])
     
-    return fr
+    return mapped
 }
 //Tests
 
@@ -16,3 +16,13 @@ const map1 = map(array1, x => x * 2)
 
 console.log(map1)
 // Expected output: Array [2, 8, 18, 32]
+
+//Case2
+
+const array2 = ['aaa','bbb','ccc']
+
+// Pass a function to map
+const map2 = map(array2, element => element.toUpperCase())
+
+console.log(map2)
+// Expected output: Array ['AAA','BBB','CCC']

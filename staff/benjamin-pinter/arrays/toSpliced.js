@@ -67,7 +67,7 @@ console.log(myFish)
 var cars = ['vw', 'renault', 'audi', 'bmw', 'fiat']
 
 console.log(toSpliced(cars, 1, 2, 'maseratti', 'bugatti', 'ferrari'))
-// expect ['vw', 'maseratti', 'bugatti', 'ferrari', 'fiat']
+// expect ['vw', 'maseratti', 'bugatti', 'ferrari', 'bmw', 'fiat']
 
 console.log(cars)
 // expect ['vw', 'renault', 'audi', 'bmw', 'fiat']
