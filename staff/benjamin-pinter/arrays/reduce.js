@@ -58,3 +58,33 @@ const sumWithInitiall = reduce(array3,
 
 console.log(sumWithInitiall)
 // Expected output: 10
+
+// case 4
+
+const people = [
+    { name: 'Peter', profile: 'modafoca' },
+    { name: 'Anna', profile: 'pisofscheisse' },
+    { name: 'Tania', profile: 'kind' },
+    { name: 'Abraham', profile: 'modafoca' },
+    { name: 'Elisa', profile: 'modafoca' },
+    { name: 'John', profile: 'kind' },
+    { name: 'Maria', profile: 'pisofscheisse' },
+    { name: 'Alina', profile: 'modafoca' },
+]
+
+const initialAccum = {modafoca: 0, pisofscheisse: 0, kind: 0}
+
+const accumulateProfileStats = (accumulator, currentValue) => {
+        if (currentValue.profile === 'modafoca')
+            accumulator.modafoca++
+        else if (currentValue.profile === 'pisofscheisse')
+            accumulator.pisofscheisse++
+        else if (currentValue.profile === 'kind')
+            accumulator.kind++
+
+        return accumulator
+    }
+
+const stats = reduce(people, accumulateProfileStats, initialAccum )
+console.log(stats)
+// { modafoca: 4, pisofscheisse: 2, kind: 2 }
