@@ -22,7 +22,7 @@ document.querySelector('.login').querySelector('form').onsubmit = function (even
 
     if (authenticated) {
         context.email = email
-
+        renderPosts()
         document.querySelector('.login').classList.add('off')
         document.querySelector('.welcome').classList.remove('off')
     } else 
@@ -96,19 +96,12 @@ function renderPosts() {
         const time = document.createElement('time')
         time.innerText = post.date.toString()
 
-        const button = document.createElement('button')
-        button.innerText = 'modify'
-        button.onclick = function() {
-            document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
-            document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
-        }
-
         const buttonlike = document.createElement('button')
         
         if (post.likes.includes(context.email))
-            buttonlike.innerText = '🩵'
+            buttonlike.innerText = '🩵' + (post.likes.length ? '(' + post.likes.length + ')' : '')
         else
-            buttonlike.innerText = '🤍'
+            buttonlike.innerText = '🤍'+ (post.likes.length ? '(' + post.likes.length + ')' : '')
 
         buttonlike.className = 'buttonlike'
         buttonlike.onclick = function(event) {
@@ -122,7 +115,28 @@ function renderPosts() {
                 alert('failed to like the post!')
         }
 
-        article.append(image, paragraph, time, button, buttonlike)
+        article.append(image, paragraph, time, buttonlike)
+
+        if (post.user === context.email) {
+            const modifyButton = document.createElement('button')
+            modifyButton.innerText = 'modify'
+            modifyButton.onclick = function() {
+                document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
+                document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
+            }
+
+            const removeButton = document.createElement('button')
+            removeButton.innerText = 'remove'
+            removeButton.onclick = function () {
+                const removed = removePost(context.email, post.id)
+
+                if(!removed)
+                    alert('could not remove post')
+                else
+                    renderPosts()
+            }
+            article.append(modifyButton, removeButton)
+        }
 
         document.querySelector('.welcome').querySelector('.home-posts').append(article)
     }
