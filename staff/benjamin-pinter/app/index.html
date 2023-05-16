@@ -20,7 +20,7 @@
             <hr>
             <button type="submit" class="registerbutton">Register for Albanian Citizenship</button>
         </form>
-        <a href="">Login</a>
+        <a href="" class="style">Login</a>
     </div>
     <div class="login">
         <h1>Login to purchase construction equipment</h1>
@@ -33,11 +33,13 @@
         <hr>
         <button type="submit" class="loginbutton">Login</button>
         </form>
-        <a href="">Register</a>
+        <a href="" class="style">Register</a>
     </div>
     <div class="welcome off">
-        <header>
+        <header class ="welcome-header">
             <h1>Welcome Home🏚️</h1>
+            <a href="" class="star">⭐️</a>
+            <button class="logout-button">Logout</button>
         </header>
 
         <main class="home-posts"></main>
@@ -74,7 +76,17 @@
           </div>
     </div>
     <script src="data.js"></script>
-    <script src="logic.js"></script>
+
+    <script src="logic/authenticateUser.js"></script>
+    <script src="logic/createPost.js"></script>
+    <script src="logic/modifyPost.js"></script>
+    <script src="logic/registerUser.js"></script>
+    <script src="logic/removePost.js"></script>
+    <script src="logic/retrievePosts.js"></script>
+    <script src="logic/toggleLikePost.js"></script>
+    <script src="logic/toggleFavPost.js"></script>
+    <script src="logic/retrieveUser.js"></script>
+
     <script src="main.js"></script>
 </body>
 </html>

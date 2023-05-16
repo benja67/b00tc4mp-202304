@@ -22,6 +22,7 @@ document.querySelector('.login').querySelector('form').onsubmit = function (even
 
     if (authenticated) {
         context.email = email
+        document.querySelector('.login').querySelector('form').reset()
         renderPosts()
         document.querySelector('.login').classList.add('off')
         document.querySelector('.welcome').classList.remove('off')
@@ -68,6 +69,7 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
     const created = createPost(context.email, picture, text)
 
     if (created) {
+        document.querySelector('.welcome').querySelector('.modal-post').querySelector('.post-form').reset()
         document.querySelector('.welcome').querySelector('.modal-post').classList.add('off')
 
         renderPosts()
@@ -78,7 +80,7 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
 
 function renderPosts() {
     document.querySelector('.welcome').querySelector('.home-posts').innerHTML = ''
-
+    const user = retrieveUser(context.email)
     const posts = retrievePosts(context.email)
 
     for (let i = 0; i < posts.length; i++) {
@@ -107,26 +109,46 @@ function renderPosts() {
         buttonlike.onclick = function(event) {
             event.preventDefault()
         
-            toggleLikePost(context.email, post.id)
+            const result = toggleLikePost(context.email, post.id)
         
-            if(toggleLikePost)
+            if(result)
                 renderPosts()
             else 
                 alert('failed to like the post!')
         }
 
-        article.append(image, paragraph, time, buttonlike)
+        const favButton = document.createElement('button')
+
+        if (user.favorites.includes(post.id))
+            favButton.innerText = '⭐️' 
+        else
+            favButton.innerText = '🗂️'
+
+        favButton.className = 'favButton'
+        favButton.onclick = function(event) {
+           event.preventDefault()
+    
+           const result = toggleFavPost(context.email, post.id)
+    
+           if(result)
+            renderPosts()
+           else 
+            alert('failed to add the post to Favorites!')
+        }
+
+
+        article.append(image, paragraph, time, buttonlike, favButton)
 
         if (post.user === context.email) {
             const modifyButton = document.createElement('button')
-            modifyButton.innerText = 'modify'
+            modifyButton.innerText = '🎨'
             modifyButton.onclick = function() {
                 document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
                 document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
             }
 
             const removeButton = document.createElement('button')
-            removeButton.innerText = 'remove'
+            removeButton.innerText = '🚮'
             removeButton.onclick = function () {
                 const removed = removePost(context.email, post.id)
 
@@ -137,8 +159,8 @@ function renderPosts() {
             }
             article.append(modifyButton, removeButton)
         }
-
         document.querySelector('.welcome').querySelector('.home-posts').append(article)
+        article.className = post.id
     }
 }
 
@@ -160,9 +182,27 @@ document.querySelector('.welcome').querySelector('.modal-modify').querySelector(
     if(!modified)
         alert('modification failed!')
     else {
+        document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').reset()
         document.querySelector('.welcome').querySelector('.modal-modify').classList.add('off')
 
         renderPosts()
     }
 
+}
+
+document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.logout-button').onclick = function() {
+    delete context.email
+
+    document.querySelector('.welcome').classList.add('off')
+    document.querySelector('.login').classList.remove('off')
+}
+
+document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.star').onclick = function(event) {
+  event.preventDefault()
+  for(let i = 0; i < posts.length; i++) {
+    if(user.favorites.includes(posts[i].id)){
+        //document.querySelector('.welcome').querySelector('.home-posts').querySelector(article[i]).classList.add(' off') 
+        article.className = post.id + ' off'
+    }
+  }
 }
