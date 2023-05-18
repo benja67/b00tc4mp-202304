@@ -1,42 +1,32 @@
 function createPost(email, picture, text) {
-    let foundUser
+    const user = users.find(user => user.email === email)
 
-    for (let i = 0; i < users.length; i++) {
-        var user = users[i]
-
-        if (user.email === email) {
-           foundUser = user
-
-           break
-        }
-    }
-
-    if (!foundUser)
+    if (!user)
         return false
+
+    const post = {}
+
+    let id
+
+    if (!posts.length)
+        id = 'post-1'
     else {
-        var post = {}
+        const last = posts[posts.length - 1]
 
-        let id
+        const num = Number(last.id.slice(5))
 
-        if(!posts.length)
-            id='post-1'
-        else {
-            const last = posts[posts.length - 1]
-
-            const num = Number(last.id.slice(5))
-
-            id = 'post-' + (num + 1)
-        }
-
-        post.id = id
-        post.user = email
-        post.picture = picture
-        post.text = text
-        post.date = new Date
-        post.likes = []
-
-        posts.push(post)
-        
-        return true
+        id = 'post-' + (num + 1)
     }
+
+    post.id = id
+    post.user = email
+    post.picture = picture
+    post.text = text
+    post.date = new Date
+    post.likes = []
+    post.visibility = 'public'
+
+    posts.push(post)
+
+    return true
 }

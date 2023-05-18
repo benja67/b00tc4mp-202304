@@ -1,21 +1,10 @@
 function registerUser(name, email, password){
+    let user = users.find(user => user.email === email)
 
-    let foundUser
-
-    for (let i = 0; i < users.length; i++) {
-        var user = users[i]
-
-        if (user.email === email){
-           foundUser = user
-
-           break
-        }
-    }
-
-    if (foundUser)
+    if (user)
         return false
     else {
-        var user = {}
+        user = {}
 
         user.name = name
         user.email = email

@@ -1,12 +1,11 @@
 function authenticateUser(email, password) {
+    const user = users.find(user => user.email === email)
 
-    for (let i = 0; i < users.length; i++) {
-        const user = users[i]
-
-        if (user.email === email && user.password === password) {
-
-            return true
-        }
-    }
-    return false
+    if (!user)
+        return false
+    
+    if (user.password !== password)
+        return false
+    
+    return true
 }

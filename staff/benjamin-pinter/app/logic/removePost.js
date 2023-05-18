@@ -1,37 +1,20 @@
 function removePost(email, postId) {
-    let foundUser
+    const user = users.find(user => user.email === email)
 
-    for (let i = 0; i < users.length; i++) {
-        var user = users[i]
-
-        if (user.email === email) {
-            foundUser = user
-
-            break
-        }
-    }
-
-    if (!foundUser)
+    if (!user)
         return false
 
-    let foundPost
+    const post = posts.find(post => post.id === postId)
 
-    for (let i = 0; i < posts.length; i++) {
-        var post = posts[i]
-
-        if (post.id === postId) {
-            foundPost = post
-
-            break
-        }
-    }
-
-    if (!foundPost)
-        return false
-    if (foundPost.user !== email)
+    if (!post)
         return false
 
-    const postIndex = posts.findIndex(post => post.id === postId)
-    posts.splice(postIndex, 1)
+    if (post.user !== email)
+        return false
+
+    const index = posts.findIndex(post => post.id === postId)
+
+    posts.splice(index, 1)
+
     return true
 }

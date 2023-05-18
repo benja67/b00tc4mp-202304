@@ -5,7 +5,7 @@ const posts = []
 {
     const user = {}
 
-    user.name = 'enes'
+    user.name = 'Enes'
     user.email = 'enes@meral.de'
     user.password = '1'
     user.favorites = []
@@ -14,7 +14,7 @@ const posts = []
 
     const user2 = {}
 
-    user2.name = 'nizi'
+    user2.name = 'Nizi'
     user2.email = 'nizi@19.de'
     user2.password = '1'
     user2.favorites = []
@@ -29,16 +29,16 @@ const posts = []
     post1.text = 'eee'
     post1.date = new Date
     post1.likes = ['enes@meral.de']
+    post1.visibility = 'public'
 
     posts.push(post1)
 
     const user3 = {}
 
-    user3.name = 'lucio'
+    user3.name = 'Lucio'
     user3.email = 'lucio@101.de'
     user3.password = '1'
     user3.favorites = []
-    //TODO wieso fav nicht
 
     users.push(user3)
 
@@ -50,6 +50,7 @@ const posts = []
     post2.text = 'lll'
     post2.date = new Date
     post2.likes = []
+    post2.visibility = 'public'
 
     posts.push(post2)
 }

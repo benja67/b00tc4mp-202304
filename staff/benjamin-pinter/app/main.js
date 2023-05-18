@@ -26,7 +26,7 @@ document.querySelector('.login').querySelector('form').onsubmit = function (even
         renderPosts()
         document.querySelector('.login').classList.add('off')
         document.querySelector('.welcome').classList.remove('off')
-    } else 
+    } else
         alert('😂😂😂')
 }
 
@@ -40,13 +40,13 @@ document.querySelector('.register').querySelector('form').onsubmit = function (e
     const registered = registerUser(name, email, password)
 
     if (registered) {
-     alert('shqipe')
+        alert('shqipe')
 
-     document.querySelector('.register').classList.add('off')
-     document.querySelector('.login').classList.remove('off')
+        document.querySelector('.register').classList.add('off')
+        document.querySelector('.login').classList.remove('off')
     }
     else {
-     alert('Person is already albanian!')
+        alert('Person is already albanian!')
     }
 }
 
@@ -81,96 +81,131 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
 function renderPosts() {
     document.querySelector('.welcome').querySelector('.home-posts').innerHTML = ''
     const user = retrieveUser(context.email)
-    const posts = retrievePosts(context.email)
+
+    if (!user)
+        alert('User does not exist')
+
+    const posts = retrievePost(context.email)
+
+    if (!posts)
+        alert('Post does not exist')
 
     for (let i = 0; i < posts.length; i++) {
         const post = posts[i]
 
-        const article = document.createElement('article')
+        if (post.user === context.email || (post.user !== context.email && post.visibility === 'public')) {
+            const article = document.createElement('article')
+            article.classList.add('post')
 
-        const image = document.createElement('img')
-        image.src = post.picture
-        image.classList.add('post-image')
+            const postUser = retrieveUser(post.user)
+            if (!postUser)
+                alert('user does not exist')
 
-        const paragraph = document.createElement('p')
-        paragraph.innerText = post.text
+            const heading = document.createElement('h2')
+            heading.innerText = postUser.name
+            heading.classList.add('post-heading')
 
-        const time = document.createElement('time')
-        time.innerText = post.date.toString()
+            const image = document.createElement('img')
+            image.src = post.picture
+            image.classList.add('post-image')
 
-        const buttonlike = document.createElement('button')
-        
-        if (post.likes.includes(context.email))
-            buttonlike.innerText = '🩵' + (post.likes.length ? '(' + post.likes.length + ')' : '')
-        else
-            buttonlike.innerText = '🤍'+ (post.likes.length ? '(' + post.likes.length + ')' : '')
+            const paragraph = document.createElement('p')
+            paragraph.innerText = post.text
 
-        buttonlike.className = 'buttonlike'
-        buttonlike.onclick = function(event) {
-            event.preventDefault()
-        
-            const result = toggleLikePost(context.email, post.id)
-        
-            if(result)
-                renderPosts()
-            else 
-                alert('failed to like the post!')
-        }
+            const time = document.createElement('time')
+            time.innerText = post.date.toString()
 
-        const favButton = document.createElement('button')
+            const buttonlike = document.createElement('button')
 
-        if (user.favorites.includes(post.id))
-            favButton.innerText = '⭐️' 
-        else
-            favButton.innerText = '🗂️'
+            if (post.likes.includes(context.email))
+                buttonlike.innerText = '🩵' + (post.likes.length ? '(' + post.likes.length + ')' : '')
+            else
+                buttonlike.innerText = '🤍' + (post.likes.length ? '(' + post.likes.length + ')' : '')
 
-        favButton.className = 'favButton'
-        favButton.onclick = function(event) {
-           event.preventDefault()
-    
-           const result = toggleFavPost(context.email, post.id)
-    
-           if(result)
-            renderPosts()
-           else 
-            alert('failed to add the post to Favorites!')
-        }
+            buttonlike.className = 'buttonlike'
+            buttonlike.onclick = function (event) {
+                event.preventDefault()
 
+                const result = toggleLikePost(context.email, post.id)
 
-        article.append(image, paragraph, time, buttonlike, favButton)
-
-        if (post.user === context.email) {
-            const modifyButton = document.createElement('button')
-            modifyButton.innerText = '🎨'
-            modifyButton.onclick = function() {
-                document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
-                document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
-            }
-
-            const removeButton = document.createElement('button')
-            removeButton.innerText = '🚮'
-            removeButton.onclick = function () {
-                const removed = removePost(context.email, post.id)
-
-                if(!removed)
-                    alert('could not remove post')
-                else
+                if (result)
                     renderPosts()
+                else
+                    alert('failed to like the post!')
             }
-            article.append(modifyButton, removeButton)
+
+            const favButton = document.createElement('button')
+
+            if (user.favorites.includes(post.id))
+                favButton.innerText = '⭐️'
+            else
+                favButton.innerText = '🗂️'
+
+            favButton.className = 'favButton'
+            favButton.onclick = function (event) {
+                event.preventDefault()
+
+                const result = toggleFavPost(context.email, post.id)
+
+                if (result)
+                    renderPosts()
+                else
+                    alert('failed to add the post to Favorites!')
+            }
+
+
+            article.append(heading, image, paragraph, time, buttonlike, favButton)
+
+            if (post.user === context.email) {
+                const modifyButton = document.createElement('button')
+                modifyButton.innerText = '🎨'
+                modifyButton.onclick = function () {
+                    document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
+                    document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
+                }
+
+                const lockButton = document.createElement('button')
+                if (post.visibility === 'public')
+                    lockButton.innerText = '🔓'
+                else
+                    lockButton.innerText = '🔐'
+
+                lockButton.className = 'lockButton'
+                lockButton.onclick = function (event) {
+                    event.preventDefault()
+
+                    const result = togglePostVisibility(context.email, post.id)
+
+                    if (result)
+                        renderPosts()
+                    else
+                        alert('failed to hide the Post!')
+                }
+
+                const removeButton = document.createElement('button')
+                removeButton.innerText = '🚮'
+                removeButton.onclick = function () {
+                    const removed = removePost(context.email, post.id)
+
+                    if (!removed)
+                        alert('could not remove post')
+                    else
+                        renderPosts()
+                }
+                article.append(modifyButton, removeButton, lockButton)
+            }
+            document.querySelector('.welcome').querySelector('.home-posts').append(article)
         }
-        document.querySelector('.welcome').querySelector('.home-posts').append(article)
-        article.className = post.id
     }
 }
 
-document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.cancel').onclick = function(event) {
+document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.cancel').onclick = function (event) {
     event.preventDefault()
 
     document.querySelector('.welcome').querySelector('.modal-modify').classList.add('off')
 }
 
-document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').onsubmit = function(event) {
+document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').onsubmit = function (event) {
     event.preventDefault()
 
     const postId = event.target.postId.value
@@ -179,7 +214,7 @@ document.querySelector('.welcome').querySelector('.modal-modify').querySelector(
 
     const modified = modifyPost(context.email, postId, picture, text)
 
-    if(!modified)
+    if (!modified)
         alert('modification failed!')
     else {
         document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').reset()
@@ -190,19 +225,146 @@ document.querySelector('.welcome').querySelector('.modal-modify').querySelector(
 
 }
 
-document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.logout-button').onclick = function() {
+document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.logout-button').onclick = function () {
     delete context.email
 
     document.querySelector('.welcome').classList.add('off')
     document.querySelector('.login').classList.remove('off')
 }
 
-document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.star').onclick = function(event) {
-  event.preventDefault()
-  for(let i = 0; i < posts.length; i++) {
-    if(user.favorites.includes(posts[i].id)){
-        //document.querySelector('.welcome').querySelector('.home-posts').querySelector(article[i]).classList.add(' off') 
-        article.className = post.id + ' off'
+function renderFavPosts() {
+    document.querySelector('.welcome').querySelector('.fav-posts').innerHTML = ''
+    const user = retrieveUser(context.email)
+
+    if (!user)
+        alert('User does not exist')
+
+    const posts = retrievePost(context.email)
+
+    if (!posts)
+        alert('Post does not exist')
+
+    for (let i = 0; i < posts.length; i++) {
+        const post = posts[i]
+
+        if (user.favorites.includes(post.id) && (post.user === context.email || (post.user !== context.email && post.visibility === 'public'))) {
+            const article = document.createElement('article')
+            article.classList.add('post')
+
+            const postUser = retrieveUser(post.user)
+            if (!postUser)
+                alert('user does not exist')
+
+            const heading = document.createElement('h2')
+            heading.innerText = postUser.name
+            heading.classList.add('post-heading')
+
+            const image = document.createElement('img')
+            image.src = post.picture
+            image.classList.add('post-image')
+
+            const paragraph = document.createElement('p')
+            paragraph.innerText = post.text
+
+            const time = document.createElement('time')
+            time.innerText = post.date.toString()
+
+            const buttonlike = document.createElement('button')
+
+            if (post.likes.includes(context.email))
+                buttonlike.innerText = '🩵' + (post.likes.length ? '(' + post.likes.length + ')' : '')
+            else
+                buttonlike.innerText = '🤍' + (post.likes.length ? '(' + post.likes.length + ')' : '')
+
+            buttonlike.className = 'buttonlike'
+            buttonlike.onclick = function (event) {
+                event.preventDefault()
+
+                const result = toggleLikePost(context.email, post.id)
+
+                if (result)
+                    renderFavPosts()
+                else
+                    alert('failed to like the post!')
+            }
+
+            const favButton = document.createElement('button')
+
+            if (user.favorites.includes(post.id))
+                favButton.innerText = '⭐️'
+            else
+                favButton.innerText = '🗂️'
+
+            favButton.className = 'favButton'
+            favButton.onclick = function (event) {
+                event.preventDefault()
+
+                const result = toggleFavPost(context.email, post.id)
+
+                if (result)
+                    renderFavPosts()
+                else
+                    alert('failed to add the post to Favorites!')
+            }
+
+
+            article.append(heading, image, paragraph, time, buttonlike, favButton)
+
+            if (post.user === context.email) {
+                const modifyButton = document.createElement('button')
+                modifyButton.innerText = '🎨'
+                modifyButton.onclick = function () {
+                    document.querySelector('.welcome').querySelector('.modal-modify').querySelector('.post-form').querySelector('input[name=postId]').value = post.id
+                    document.querySelector('.welcome').querySelector('.modal-modify').classList.remove('off')
+                }
+
+                const lockButton = document.createElement('button')
+                if (post.visibility === 'public')
+                    lockButton.innerText = '🔓'
+                else
+                    lockButton.innerText = '🔐'
+
+                lockButton.className = 'lockButton'
+                lockButton.onclick = function (event) {
+                    event.preventDefault()
+
+                    const result = togglePostVisibility(context.email, post.id)
+
+                    if (result)
+                        renderFavPosts()
+                    else
+                        alert('failed to hide the Post!')
+                }
+
+                const removeButton = document.createElement('button')
+                removeButton.innerText = '🚮'
+                removeButton.onclick = function () {
+                    const removed = removePost(context.email, post.id)
+
+                    if (!removed)
+                        alert('could not remove post')
+                    else
+                        renderFavPosts()
+                }
+                article.append(modifyButton, removeButton, lockButton)
+            }
+            document.querySelector('.welcome').querySelector('.fav-posts').append(article)
+        }
     }
-  }
+}
+
+document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.star').onclick = event => {
+    event.preventDefault()
+    document.querySelector('.welcome').querySelector('.home-posts').classList.add('off')
+    document.querySelector('.welcome').querySelector('.fav-posts').classList.remove('off')
+
+    renderFavPosts()
+}
+
+//TODO was unterschied
+document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.headline').onclick = () => {
+    document.querySelector('.welcome').querySelector('.fav-posts').classList.add('off')
+    document.querySelector('.welcome').querySelector('.home-posts').classList.remove('off')
+
+    renderPosts()
 }
