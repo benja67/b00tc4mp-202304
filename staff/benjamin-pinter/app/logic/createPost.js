@@ -25,6 +25,7 @@ function createPost(email, picture, text) {
     post.date = new Date
     post.likes = []
     post.visibility = 'public'
+    post.price = 0
 
     posts.push(post)
 

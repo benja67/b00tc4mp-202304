@@ -97,10 +97,7 @@ Post
 - 
 
 #### Toggle Visibility in a post (tasks)
-TODO cursor
-TODO name log-in
 TODO kaufen
-TODO eigene beiträge
 
 
 

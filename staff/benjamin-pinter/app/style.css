@@ -7,6 +7,11 @@ form {
 button {
     border: 2px solid black;
     border-radius: 100%;
+    cursor: pointer;
+}
+
+.headline {
+    cursor: pointer;
 }
 
 .register {
@@ -22,6 +27,11 @@ button {
 }
 
 a.star {
+    border: 2px solid black;
+    border-radius: 100%;
+}
+
+a.mine-link {
     border: 2px solid black;
     border-radius: 100%;
 }
@@ -76,6 +86,13 @@ a.style {
 }
 
 .fav-posts {
+    margin: 55px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mine-posts {
     margin: 55px 10px;
     display: flex;
     flex-direction: column;

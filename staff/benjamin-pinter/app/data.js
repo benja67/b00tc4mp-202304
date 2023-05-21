@@ -30,6 +30,7 @@ const posts = []
     post1.date = new Date
     post1.likes = ['enes@meral.de']
     post1.visibility = 'public'
+    post1.price = 0
 
     posts.push(post1)
 
@@ -51,6 +52,7 @@ const posts = []
     post2.date = new Date
     post2.likes = []
     post2.visibility = 'public'
+    post2.price = 3
 
     posts.push(post2)
 }
