@@ -8,7 +8,7 @@ const posts = []
     user.name = 'Enes'
     user.email = 'enes@meral.de'
     user.password = '1'
-    user.favs = []
+    user.favorites = []
 
     users.push(user)
 
@@ -17,7 +17,7 @@ const posts = []
     user2.name = 'Nizi'
     user2.email = 'nizi@19.de'
     user2.password = '1'
-    user2.favs = ['post-2']
+    user2.favorites = []
 
     users.push(user2)
 
@@ -39,7 +39,7 @@ const posts = []
     user3.name = 'Lucio'
     user3.email = 'lucio@101.de'
     user3.password = '1'
-    user3.favs = []
+    user3.favorites = []
 
     users.push(user3)
 

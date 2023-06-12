@@ -97,7 +97,7 @@ Post
 - 
 
 #### Toggle Visibility in a post (tasks)
-TODO kaufen
+
 
 
 
