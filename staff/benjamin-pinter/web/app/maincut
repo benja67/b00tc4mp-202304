@@ -1,54 +1,3 @@
-document.querySelector('.login').querySelector('a').onclick = function (event) {
-    event.preventDefault()
-    document.querySelector('.login').classList.add('off')
-    document.querySelector('.register').classList.remove('off')
-}
-
-document.querySelector('.register').querySelector('a').onclick = function (event) {
-    event.preventDefault()
-    document.querySelector('.register').classList.add('off')
-    document.querySelector('.login').classList.remove('off')
-}
-
-document.querySelector('.login').querySelector('form').onsubmit = function (event) {
-    // event.preventDefault()
-
-    // const email = event.target.email.value
-    // const password = event.target.password.value
-
-    // const authenticated = authenticateUser(email, password)
-
-    // if (authenticated) {
-    //     context.email = email
-    //     document.querySelector('.login').querySelector('form').reset()
-    //     document.querySelector('.login').classList.add('off')
-    //     renderPosts()
-    //     const user = retrieveUser(context.email)
-    //     document.querySelector('.welcome').querySelector('.welcome-header').querySelector('.headline').innerText = 'Welcome ' + user.name + ' 🏚️!'
-    //     document.querySelector('.welcome').classList.remove('off')
-    // } else
-    //     alert('😂😂😂')
-}
-
-document.querySelector('.register').querySelector('form').onsubmit = function (event) {
-    // event.preventDefault()
-
-    // const name = event.target.name.value
-    // const email = event.target.email.value
-    // const password = event.target.password.value
-
-    // const registered = registerUser(name, email, password)
-
-    // if (registered) {
-    //     alert('shqipe')
-
-    //     document.querySelector('.register').classList.add('off')
-    //     document.querySelector('.login').classList.remove('off')
-    // }
-    // else {
-    //     alert('Person is already albanian!')
-    // }
-}
 
 document.querySelector('.welcome').querySelector('.create-button').onclick = function (event) {
     document.querySelector('.welcome').querySelector('.modal-post').classList.remove('off')
@@ -58,24 +7,6 @@ document.querySelector('.welcome').querySelector('.modal-post').querySelector('.
     event.preventDefault()
 
     document.querySelector('.welcome').querySelector('.modal-post').classList.add('off')
-}
-
-document.querySelector('.welcome').querySelector('.modal-post').querySelector('.post-form').onsubmit = function (event) {
-    event.preventDefault()
-
-    const picture = event.target.picture.value
-    const text = event.target.text.value
-
-    const created = createPost(context.email, picture, text)
-
-    if (created) {
-        document.querySelector('.welcome').querySelector('.modal-post').querySelector('.post-form').reset()
-        document.querySelector('.welcome').querySelector('.modal-post').classList.add('off')
-
-        renderPosts()
-    }
-    else
-        alert('🙅‍♂️🙅‍♂️🙅‍♂️')
 }
 
 function renderPosts() {

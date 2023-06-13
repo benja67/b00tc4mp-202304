@@ -1,6 +1,6 @@
 function Home(props) {
     //TODO wdh
-    const viewState = React.useState('posts')
+    const viewState = React.useState('all')
     const view = viewState[0]
     const setView = viewState[1]
     //TODO wdh
@@ -13,15 +13,28 @@ function Home(props) {
     const favs = favsState[0]
     const setFavs = favsState[1]
 
+    const modalState = React.useState(null)
+    const modal = modalState[0]
+    const setModal = modalState[1]
+
+    const allState = React.useState([])
+    const all = allState[0]
+    const setAll = allState[1]
+
+    React.useEffect(() => {
+        const all = retrievePosts(context.email)
+        setAll(all)
+        //TODO wdh
+    }, [])
+
     const user = retrieveUser(context.email)
-    const posts = retrievePosts(context.email)
 
     const handleLogout = () => {
         delete context.email
 
         props.onLoggedOut()
     }
-
+    //TODO wann event und wann klammern?
     const handleMinePosts = event => {
         event.preventDefault()
 
@@ -38,23 +51,43 @@ function Home(props) {
         setView('favs')
     }
 
+    const handlePosts = event => {
+        event.preventDefault()
+
+        const all = retrievePosts(context.email)
+        setFavs(all)
+        setView('all')
+    }
+
+    const handleOpenCreatePostModal = () => setModal('create-post')
+
+    const handleCancelCreatePost = () => setModal(null)
+
+    const handlePostCreated = () => {
+        const all = retrievePosts(context.email)
+        //TODO wdh
+        setAll(all)
+        setView('all')
+        setModal(null)
+    }
+
     console.log('Home -> render')
 
     return <div className="welcome">
         <header className ="welcome-header">
-            <h1 className="headline">Welcome, {user.name}!</h1>
+            <h1 className="headline"><a href="" onClick={handlePosts}>Welcome, {user.name}!</a></h1>
             <a href="" className="mine-link" onClick={handleMinePosts}>🫵</a>
             <a href="" className="star" onClick={handleFavPosts}>⭐️</a>
             <button className="logout-button" onClick={handleLogout}>Logout</button>
         </header>
 
-        {view === 'posts' && <main className="posts">
-            {posts.map(post => {
+        {view === 'all' && <main className="posts">
+            {all.map(post => {
                 const user = retrieveUser(post.user)
 
-                return <article class="post">
+                return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} class="post-image" />
+                    <img src={post.picture} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -65,9 +98,9 @@ function Home(props) {
             {favs.map(post => {
                 const user = retrieveUser(post.user)
 
-                return <article class="post">
+                return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} class="post-image" />
+                    <img src={post.picture} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -78,9 +111,9 @@ function Home(props) {
             {mine.map(post => {
                 const user = retrieveUser(post.user)
 
-                return <article class="post">
+                return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} class="post-image" />
+                    <img src={post.picture} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -88,21 +121,10 @@ function Home(props) {
         </main>}
 
         <footer className="welcome-footer">
-            <button className="create-button">+</button>
+            <button className="create-button" onClick={handleOpenCreatePostModal}>+</button>
         </footer>
 
-        <div className="modal modal-post off">
-            <form className="post-form">
-                <label htmlFor="picture">Picture</label>
-                <input type="url" name="picture" id="picture"></input>
-
-                <label htmlFor="text">Text</label>
-                <textarea name="text"></textarea>
-
-                <button type="submit">Share</button>
-                <button className="cancel">Cancel</button>
-            </form>
-        </div>
+        {modal === 'create-post' && <CreatePostModal onCancel={handleCancelCreatePost} onCreated={handlePostCreated} />}
 
         <div className="modal modal-modify off">
             <form className="post-form">
