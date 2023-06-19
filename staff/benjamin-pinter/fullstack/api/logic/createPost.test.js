@@ -1,6 +1,6 @@
 const createPost = require('./createPost')
 
-createPost('Jon Morina', 'Jon@morina.de', '1',image, text, time, error => {
+createPost('Jon@morina.de','image', 'text', error => {
     if(error) {
         console.error(error)
 

@@ -1,23 +1,27 @@
 [
     {
-        "name:" "Jon Morina",
+        "name": "Jon Morina",
         "email": "Jon@morina.de",
         "password": "1"
     },
     {
-        "name:" "Nizi 19",
+        "name": "Nizi 19",
         "email": "nizi@19.de",
         "password": "1"
     },
     {
-        "name:" "Baum Beisser",
+        "name": "Baum Beisser",
         "email": "bauma@beisser.de",
         "password": "1"
     },
-
     {
-        "name:" "Bundesdribbler",
+        "name": "Bundesdribbler",
         "email": "bundes@dribbler.de",
+        "password": "1"
+    },
+    {
+        "name": "dani681",
+        "email": "dani@681.de",
         "password": "1"
     }
 ]

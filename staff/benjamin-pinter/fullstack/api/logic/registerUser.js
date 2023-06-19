@@ -2,7 +2,7 @@ const fs = require('fs')
 //TODO was fs?
 
 function registerUser(name, email, password, callback) {
-    fs.readFile('data/users.json'), (error, json) => {
+    fs.readFile('data/users.json', (error, json) => {
         if(error) {
             callback(error)
 
@@ -34,7 +34,7 @@ function registerUser(name, email, password, callback) {
 
             callback(null)
         })
-    }
+    })
 }
 
 module.exports = registerUser

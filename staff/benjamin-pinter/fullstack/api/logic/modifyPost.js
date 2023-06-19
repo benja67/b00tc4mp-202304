@@ -1,12 +1,11 @@
 const fs = require('fs')
-//TODO was fs?
 
-function createPost(email, image, text, callback) {
+function modifyPost(email, postId, image, text, callback) {
     fs.readFile('data/users.json', (error, json) => {
         if (error) {
-            callback(error)
+         callback(error)
 
-            return
+         return
         }
         const users = JSON.parse(json)
         const found = users.some(user => user.email === email)
@@ -15,43 +14,39 @@ function createPost(email, image, text, callback) {
 
             return
         }
-
         fs.readFile('data/posts.json', (error, json) => {
             if (error) {
-                callback(error)
-
+             callback(error)
+    
+             return
+            }
+            const posts = JSON.parse(json)
+            const post = posts.find(post => post.id === postId)
+            if (!post) {
+                callback(new Error('post not found!'))
+    
                 return
             }
-
-            const posts = JSON.parse(json)
-
-            let id
-
-            if (!posts.length)
-                id = 'post-1'
-            else {
-                const last = posts[posts.length - 1]
-                const num = Number(last.id.slice(5))
-                id = 'post-' + (num + 1)
+            if(post.user !== email) {
+                callback(new Error('post does not belong to the User!'))
+    
+                return
             }
-
-            const post = { user: email, image, text, id }
-
-            posts.push(post)
-
+            post.image = image
+            post.text = text
+            post.date = new Date
             const json2 = JSON.stringify(posts)
-
             fs.writeFile('data/posts.json', json2, error => {
-                if (error) {
+                if(error) {
                     callback(error)
-
+    
                     return
                 }
-
+    
                 callback(null)
             })
         })
     })
 }
 
-module.exports = createPost
+module.exports = modifyPost

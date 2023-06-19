@@ -1,1 +1,8 @@
-[]
+[
+    {
+        "user": "Jon@morina.de",
+        "image": "image",
+        "text": "text",
+        "id": "post-2"
+    }
+]
