@@ -1,11 +1,15 @@
 const authenticateUser = require('./authenticateUser')
 
-authenticateUser('bauma@beisser.de', '1', error => {
-    if(error) {
-        console.error(error)
+try {
+    authenticateUser('bauma@beisser.de', '1', (error, userId) => {
+        if(error) {
+            console.error(error)
 
-        return
-    }
+            return
+        }
 
-    console.log('user authenticated')
-})
+        console.log(userId)
+    })
+} catch (error) {
+    console.error(error)
+}

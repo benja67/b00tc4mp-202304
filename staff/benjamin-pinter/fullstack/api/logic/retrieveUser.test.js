@@ -1,14 +1,14 @@
-const retrievePosts = require('./retrievePosts')
+const retrieveUser = require('./retrieveUser')
 
 try {
-    retrievePosts(1, (error, posts) => {
+    retrieveUser(2, (error, user) => {
         if(error) {
             console.error(error)
 
             return
         }
 
-        console.log(posts)
+        console.log(user)
     })
 } catch (error) {
     console.error(error)

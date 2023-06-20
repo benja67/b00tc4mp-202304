@@ -1,47 +1,47 @@
-const fs = require('fs')
+const { readFile, writeFile } = require('fs')
 
-function removePost(email, postId, callback) {
-    fs.readFile('data/users.json', (error, json) => {
+function deletePost(userId, postId, callback) {
+    if (typeof userId !== 'number') throw new Error('userId is not a number')
+    if (typeof postId !== 'number') throw new Error('postId is not a number')
+    if (typeof callback !== 'function') throw new Error('callback is not a function')
+
+    readFile('data/users.json', (error, json) => {
         if (error) {
             callback(error)
 
             return
         }
         const users = JSON.parse(json)
-        const found = users.find(user => user.email === email)
-        if (!found) {
+        const exists = users.some(user => user.id === userId)
+        if (!exists) {
             callback(new Error('user not found!'))
 
             return
         }
-        fs.readFile('data/posts.json', (error, json) => {
+        readFile('data/posts.json', (error, json) => {
             if (error) {
              callback(error)
     
              return
             }
             const posts = JSON.parse(json)
-            const post = posts.find(post => post.id === postId)
+            const index = posts.findIndex(post => post.id === postId)
+            const post = posts[index]
             if (!post) {
                 callback(new Error('post not found!'))
     
                 return
             }
-            if(post.user !== email) {
+            if(post.author !== userId) {
                 callback(new Error('post does not belong to the User!'))
     
                 return
             }
 
-            const index = posts.findIndex(post => post.id === postId)
-            const deleted = posts.splice(index, 1)
-            if(!deleted) {
-                callback(new Error('post not deleted!'))
-    
-                return
-            }
+            posts.splice(index, 1)
+
             const json2 = JSON.stringify(posts)
-            fs.writeFile('data/posts.json', json2, error => {
+            writeFile('data/posts.json', json2, error => {
                 if(error) {
                     callback(error)
     
@@ -54,4 +54,4 @@ function removePost(email, postId, callback) {
     })
 }
 
-module.exports = removePost
+module.exports = deletePost

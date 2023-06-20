@@ -1,14 +1,14 @@
-const retrievePosts = require('./retrievePosts')
+const deletePost = require('./deletePost')
 
 try {
-    retrievePosts(1, (error, posts) => {
+    deletePost(1, 3, error => {
         if(error) {
             console.error(error)
 
             return
         }
 
-        console.log(posts)
+        console.log('post deleted')
     })
 } catch (error) {
     console.error(error)

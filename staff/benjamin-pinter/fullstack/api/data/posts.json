@@ -1,8 +1,9 @@
 [
     {
-        "user": "Jon@morina.de",
-        "image": "image",
-        "text": "text",
-        "id": "post-2"
+        "id": 1,
+        "author": 1,
+        "image": "imageNew",
+        "text": "textNew",
+        "date": "2023-06-20T22:27:26.992Z"
     }
 ]

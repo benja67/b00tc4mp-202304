@@ -1,31 +1,37 @@
-const fs = require('fs')
+const { readFile } = require('fs')
 
-function retrievePosts(email, callback) {
-    fs.readFile('data/users.json', (error, json) => {
+function retrievePosts(userId, callback) {
+    if (typeof userId !== 'number') throw new Error('userId is not a number')
+    if (typeof callback !== 'function') throw new Error('callback is not a function')
+
+    readFile('data/users.json', (error, json) => {
         if (error) {
          callback(error)
 
          return
         }
         const users = JSON.parse(json)
-        const found = users.some(user => user.email === email)
-        if (!found) {
+        const user = users.find(user => user.id === userId)
+        if (!user) {
             callback(new Error('user not found!'))
 
             return
         }
-        fs.readFile('data/posts.json', (error, json) => {
+        readFile('data/posts.json', (error, json) => {
             if (error) {
              callback(error)
     
              return
             }
             const posts = JSON.parse(json)
-            if (!posts) {
-                callback(new Error('posts not found!'))
+            //TODO was macht?
+            posts.forEach(post => {
+                const user = users.find(user => user.id === post.author)
 
-                return
-            }
+                const { id, name } = user
+
+                post.author = { id, name }
+            })
             callback(null, posts)
         })
     })

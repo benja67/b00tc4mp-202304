@@ -1,14 +1,14 @@
-const retrievePosts = require('./retrievePosts')
+const updatePost = require('./updatePost')
 
 try {
-    retrievePosts(1, (error, posts) => {
+    updatePost(1, 1, 'imageNew', 'textNew' , error => {
         if(error) {
             console.error(error)
 
             return
         }
 
-        console.log(posts)
+        console.log('post updated')
     })
 } catch (error) {
     console.error(error)
