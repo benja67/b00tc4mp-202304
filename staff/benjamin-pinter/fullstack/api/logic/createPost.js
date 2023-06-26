@@ -1,5 +1,4 @@
 const { readFile , writeFile } = require('fs')
-//TODO was fs?
 
 function createPost(userId, image, text, callback) {
     if (typeof userId !== 'number') throw new Error('userId is not a number')

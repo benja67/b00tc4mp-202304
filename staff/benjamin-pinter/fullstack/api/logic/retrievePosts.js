@@ -24,7 +24,7 @@ function retrievePosts(userId, callback) {
              return
             }
             const posts = JSON.parse(json)
-            //TODO was macht?
+           
             posts.forEach(post => {
                 const user = users.find(user => user.id === post.author)
 
@@ -32,6 +32,7 @@ function retrievePosts(userId, callback) {
 
                 post.author = { id, name }
             })
+
             callback(null, posts)
         })
     })
