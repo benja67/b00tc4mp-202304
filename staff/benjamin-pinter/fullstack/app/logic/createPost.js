@@ -1,33 +1,68 @@
-function createPost(email, picture, text) {
-    const user = users.find(user => user.email === email)
+const {readFile, writeFile} = require('fs')
 
-    if (!user)
-        return false
+function createPost(userId, image, text, callback) {
+    if(typeof userId !== 'number') throw new error ('userId is not a number')
+    if(typeof image !== 'string') throw new error ('image is not a string')
+    if(typeof text !== 'string') throw new error ('text is not a string')
+    if(typeof callback !== 'function') throw new error('callback is not function')
 
-    const post = {}
+    readFile('data/users.json' , (error, json) => {
+        if(error) {
+            callback(error)
 
-    let id
+            return
+        }
 
-    if (!posts.length)
-        id = 'post-1'
-    else {
-        const last = posts[posts.length - 1]
+        const users = JSON.parse(json)
 
-        const num = Number(last.id.slice(5))
+        const exists = users.some(user => user.id === userId)
 
-        id = 'post-' + (num + 1)
-    }
+        if (!exists) {
+            callback(new Error('user not found'))
 
-    post.id = id
-    post.user = email
-    post.picture = picture
-    post.text = text
-    post.date = new Date
-    post.likes = []
-    post.visibility = 'public'
-    post.price = 0
+            return
+        }
+        
+        readFile('data/posts.json' , (error, json) => {
+            if(error) {
+                callback(error)
 
-    posts.push(post)
+                return
+            }
+            
+            const posts = JSON.parse(json)
 
-    return true
+            let id = 1
+
+            if(posts.length) {
+                const last = posts[posts.length - 1]
+
+                id = last.id + 1
+            }
+
+            const post = {
+                id,
+                author: userId,
+                image,
+                text,
+                date: new Date
+            }
+
+            posts.push(post)
+
+            const json2 = JSON.stringify(posts)
+
+            writeFile('data/posts.json', json2, error => {
+                if (error) {
+                    callback(error)
+
+                    return
+                }
+
+                callback(null)
+            })
+        })
+    })
 }
+
+module.exports = createPost

@@ -21,6 +21,21 @@ function Home(props) {
     const all = allState[0]
     const setAll = allState[1]
 
+    React.useEffect(() => {
+        try {
+            retrievePosts(context.userId, (error, posts) => {
+                if (error) {
+                    alert(error.message)
+
+                    return
+                }
+
+                setAll(posts)
+            })
+        } catch (error) {
+            alert(error.message)
+        }
+    }, [])
 
     const userState = React.useState(null)
     const user = userState[0]
@@ -77,11 +92,21 @@ function Home(props) {
     const handleCancelCreatePost = () => setModal(null)
 
     const handlePostCreated = () => {
-        const all = retrievePosts(context.email)
-        
-        setAll(all)
-        setView('all')
-        setModal(null)
+        try {
+            retrievePosts(context.userId, (error, posts) => {
+                if (error) {
+                    alert(error.message)
+
+                    return
+                }
+
+                setAll(posts)
+                setView('all')
+                setModal(null)
+            })
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
     console.log('Home -> render')
@@ -100,7 +125,7 @@ function Home(props) {
 
                 return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} className="post-image" />
+                    <img src={post.image} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -113,7 +138,7 @@ function Home(props) {
 
                 return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} className="post-image" />
+                    <img src={post.image} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -126,7 +151,7 @@ function Home(props) {
 
                 return <article key={post.id} className="post">
                     <h2>{user.name}</h2>
-                    <img src={post.picture} className="post-image" />
+                    <img src={post.image} className="post-image" />
                     <p>{post.text}</p>
                     <time>{post.date.toString()}</time>
                 </article>
@@ -143,8 +168,8 @@ function Home(props) {
             <form className="post-form">
               <input type="hidden" name="postId" />
               
-              <label htmlFor="picture">Picture</label>
-              <input type="url" name="picture" id="picture"></input>
+              <label htmlFor="image">image</label>
+              <input type="url" name="image" id="image"></input>
 
               <label htmlFor="text">Text</label>
               <textarea name="text"></textarea>
