@@ -1,47 +1,42 @@
-const { readFile } = require('fs')
-
 function retrievePosts(userId, callback) {
     if (typeof userId !== 'number') throw new Error('userId is not a number')
     if (typeof callback !== 'function') throw new Error('callback is not a function')
 
-    readFile('data/users.json', (error, json) => {
-        if (error) {
-            callback(error)
+    const xhr = new XMLHttpRequest
+
+    // res
+
+    xhr.onload = () => {
+        if (xhr.status === 400) {
+            const json = xhr.responseText
+
+            const body = JSON.parse(json)
+
+            callback(new Error(body.error))
 
             return
         }
 
-        const users = JSON.parse(json)
+        if (xhr.status === 200) {
+            const json = xhr.responseText
 
-        const user = users.find(user => user.id === userId)
+            const body = JSON.parse(json)
 
-        if (!user) {
-            callback(new Error('user not found'))
+            const posts = body
+
+            callback(null, posts.reverse())
 
             return
         }
+    }
 
-        readFile('data/posts.json', (error, json) => {
-            if (error) {
-                callback(error)
+    xhr.onerror = () => callback(new Error('connection failed'))
 
-                return
-            }
+    // req
 
-            const posts = JSON.parse(json)
+    xhr.open('GET', 'http://localhost:8080/posts')
 
-            // TODO was macht?
-            posts.forEach(post => {
-                const user = users.find(user => user.id === post.author)
+    xhr.setRequestHeader('Authorization', `Bearer ${userId}`)
 
-                const { id, name } = user
-
-                post.author = { id, name }
-            })
-
-            callback(null, posts)
-        })
-    })
+    xhr.send()
 }
-
-module.exports = retrievePosts

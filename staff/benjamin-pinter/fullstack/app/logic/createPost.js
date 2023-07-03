@@ -1,68 +1,45 @@
-const {readFile, writeFile} = require('fs')
-
 function createPost(userId, image, text, callback) {
-    if(typeof userId !== 'number') throw new error ('userId is not a number')
-    if(typeof image !== 'string') throw new error ('image is not a string')
-    if(typeof text !== 'string') throw new error ('text is not a string')
-    if(typeof callback !== 'function') throw new error('callback is not function')
+    if (typeof userId !== 'number') throw new Error('userId is not a number')
+    if (typeof image !== 'string') throw new Error('image is not a string')
+    if (typeof text !== 'string') throw new Error('text is not a string')
+    if (typeof callback !== 'function') throw new Error('callback is not a function')
 
-    readFile('data/users.json' , (error, json) => {
-        if(error) {
-            callback(error)
+    const xhr = new XMLHttpRequest
 
-            return
-        }
+    // res
 
-        const users = JSON.parse(json)
+    xhr.onload = () => {
+        if (xhr.status === 400) {
+            const json = xhr.responseText
 
-        const exists = users.some(user => user.id === userId)
+            const body = JSON.parse(json)
 
-        if (!exists) {
-            callback(new Error('user not found'))
+            callback(new Error(body.error))
 
             return
         }
-        
-        readFile('data/posts.json' , (error, json) => {
-            if(error) {
-                callback(error)
 
-                return
-            }
-            
-            const posts = JSON.parse(json)
+        if (xhr.status === 201) {
+            callback(null)
 
-            let id = 1
+            return
+        }
+    }
 
-            if(posts.length) {
-                const last = posts[posts.length - 1]
+    xhr.onerror = () => callback(new Error('connection failed'))
 
-                id = last.id + 1
-            }
+    // req
 
-            const post = {
-                id,
-                author: userId,
-                image,
-                text,
-                date: new Date
-            }
+    xhr.open('POST', 'http://localhost:8080/posts')
 
-            posts.push(post)
+    xhr.setRequestHeader('Authorization', `Bearer ${userId}`)
 
-            const json2 = JSON.stringify(posts)
+    xhr.setRequestHeader('Content-Type', 'application/json')
 
-            writeFile('data/posts.json', json2, error => {
-                if (error) {
-                    callback(error)
+    const body = { image, text }
 
-                    return
-                }
+    const json = JSON.stringify(body)
 
-                callback(null)
-            })
-        })
-    })
+    xhr.send(json)
 }
-
-module.exports = createPost
+  

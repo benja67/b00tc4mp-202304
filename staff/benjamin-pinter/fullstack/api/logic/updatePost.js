@@ -1,59 +1,32 @@
-const { readFile, writeFile } = require('fs')
+const context = require('./context')
+const { ObjectId } = require('mongodb')
 
-function updatePost(userId , postId, image, text, callback) {
-    if (typeof userId !== 'number') throw new Error('userId is not a number')
-    if (typeof postId !== 'number') throw new Error('postId is not a number')
-    if (typeof image !== 'string') throw new Error('image is not a string')
+function updatePost(userId, postId, image, text) {
+    if (typeof userId !== 'string') throw new Error('userId is not a number')
+    if (typeof postId !== 'string') throw new Error('postId is not a string')
+    if (typeof image !== 'string') throw new Error('image is not a number')
     if (typeof text !== 'string') throw new Error('text is not a string')
-    if (typeof callback !== 'function') throw new Error('callback is not a function')
 
-    readFile('data/users.json', (error, json) => {
-        if (error) {
-         callback(error)
+    const { users, posts } = context
 
-         return
-        }
-        const users = JSON.parse(json)
-        const exists = users.some(user => user.id === userId)
-        if (!exists) {
-            callback(new Error('user not found!'))
-
-            return
-        }
-        readFile('data/posts.json', (error, json) => {
-            if (error) {
-             callback(error)
-    
-             return
-            }
-            const posts = JSON.parse(json)
-            const post = posts.find(post => post.id === postId)
-            if (!post) {
-                callback(new Error('post not found!'))
-    
-                return
-            }
-            if(post.author !== userId) {
-                callback(new Error('user is not the owner of the post!'))
-    
-                return
-            }
-            post.image = image
-            post.text = text
-            post.date = new Date
-
-            const json2 = JSON.stringify(posts)
-            writeFile('data/posts.json', json2, error => {
-                if(error) {
-                    callback(error)
-    
-                    return
-                }
-    
-                callback(null)
-            })
+    return users.findOne({ _id: userId })
+        .then(user => {
+            if (!user) throw new Error('user not found')
+            return posts.find().toArray()
         })
-    })
+        .then(post => {
+            if (!post) throw new Error('post not found')
+            if(post.author !== userId ) throw new Error('post does not belong to user')
+            const post {
+                author: userId,
+                id: postId,
+                image,
+                text,
+                date: new Date
+            }
+            return posts.insertOne(post)
+        })
+        .then(() => { })
 }
 
 module.exports = updatePost
