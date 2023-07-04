@@ -2,7 +2,7 @@ const context = require('./context')
 const { ObjectId } = require('mongodb')
 
 function createPost(userId, image, text) {
-    if (typeof userId !== 'string') throw new Error('userId is not a number')
+    if (typeof userId !== 'string') throw new Error('userId is not a string')
     if (typeof image !== 'string') throw new Error('image is not a string')
     if (typeof text !== 'string') throw new Error('text is not a string')
 
