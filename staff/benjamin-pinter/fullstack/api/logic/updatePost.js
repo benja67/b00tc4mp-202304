@@ -12,19 +12,14 @@ function updatePost(userId, postId, image, text) {
     return users.findOne({ _id: new ObjectId(userId) })
         .then(user => {
             if (!user) throw new Error('user not found')
-            return posts.findOne({_id: new ObjectId(postId)})
+
+            return posts.findOne({ _id: new ObjectId(postId) })
         })
         .then(post => {
             if (!post) throw new Error('post not found')
             if(post.author.toString() !== userId ) throw new Error('post does not belong to user')
-            const postnew = {
-                author: userId,
-                id: postId,
-                image,
-                text,
-                date: new Date
-            }
-            return posts.insertOne(postnew)
+
+            return posts.updateOne({ _id: new ObjectId(post) }, { $set: { image, text } })
         })
         .then(() => { })
 }

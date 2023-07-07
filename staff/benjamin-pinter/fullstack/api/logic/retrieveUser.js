@@ -10,7 +10,7 @@ function retrieveUser(userId) {
         .then(user => {
             if (!user) throw new Error('user not found')
 
-            // sanitize //TODO wieso user id?
+            // sanitize
             delete user._id
             delete user.password
 

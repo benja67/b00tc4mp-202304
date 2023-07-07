@@ -36,7 +36,7 @@ function Register(props) {
     return <div className="register">
         <h1>Register to become a real Albanian🇦🇱</h1>
         <p>Please register now!</p>
-        <form>
+        <form onSubmit={handleRegister}>
             <label htmlFor="name">Name</label>
             <input type="text" name="name" id="name" required></input>
             <label htmlFor="email">E-mail</label>
