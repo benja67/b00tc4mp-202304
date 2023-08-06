@@ -13,7 +13,6 @@ const cors = require('cors')
 const mongodb = require('mongodb')
 const context = require('./logic/context')
 const bodyParser = require('body-parser')
-const jwt = require('jsonwebtoken')
 
 const jsonBodyParser = bodyParser.json()
 
@@ -54,13 +53,7 @@ client.connect()
                 const { email, password } = req.body
 
                 authenticateUser(email, password)
-                    .then(userId => {
-                        const payload = { sub: userId }
-
-                        const token = jwt.sign(payload, process.env.SECRET)
-
-                        res.json(token)
-                    })
+                    .then(userId => res.json(userId))
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {
                 res.status(400).json({ error: error.message })
@@ -71,10 +64,7 @@ client.connect()
             try {
                 const { authorization } = req.headers
 
-                const token = authorization.slice(7)
-
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
+                const userId = authorization.slice(7)
 
                 retrieveUser(userId)
                     .then(user => res.json(user))
@@ -84,33 +74,32 @@ client.connect()
             }
         })
 
-        api.post('/posts', jsonBodyParser, (req, res) => {
-            try {
-                const { authorization } = req.headers
+        api.post('/posts', (req, res) => {
+            let json = ''
 
-                const token = authorization.slice(7)
+            req.on('data', chunk => json += chunk)
 
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
+            req.on('end', () => {
+                try {
+                    const { authorization } = req.headers
+                    const userId = authorization.slice(7)
 
-                const { image, text } = req.body
+                    const { image, text } = req.body
 
-                createPost(userId, image, text)
-                    .then(() => res.status(201).send())
-                    .catch(error => res.status(400).json({ error: error.message }))
-            } catch (error) {
-                res.status(400).json({ error: error.message })
-            }
+                    createPost(userId, image, text)
+                        .then(() => res.status(201).send())
+                        .catch(error => res.status(400).json({ error: error.message }))
+                } catch (error) {
+                    res.status(400).json({ error: error.message })
+                }
+            })
         })
 
         api.get('/posts', (req, res) => {
             try {
                 const { authorization } = req.headers
 
-                const token = authorization.slice(7)
-
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
+                const userId = authorization.slice(7)
 
                 retrievePosts(userId)
                     .then(posts => res.json(posts))
@@ -124,11 +113,9 @@ client.connect()
             try {
                 const { authorization } = req.headers
 
-                const token = authorization.slice(7)
+                const userId = authorization.slice(7)
 
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
-
+                // const postId = req.params.postId
                 const { postId } = req.params
 
                 retrievePost(userId, postId)
@@ -143,17 +130,14 @@ client.connect()
             try {
                 const { authorization } = req.headers
 
-                const token = authorization.slice(7)
-
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
+                const userId = authorization.slice(7)
 
                 const postId = req.params.postId
 
                 const { image, text } = req.body
 
                 updatePost(userId, postId, image, text)
-                    .then(() => res.status(204).send())
+                    .then(posts => res.json(posts))
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {
                 res.status(400).json({ error: error.message })
@@ -164,15 +148,12 @@ client.connect()
             try {
                 const { authorization } = req.headers
 
-                const token = authorization.slice(7)
-
-                const payload = jwt.verify(token, process.env.SECRET)
-                const { sub: userId } = payload
+                const userId = authorization.slice(7)
 
                 const postId = req.params.postId
 
                 deletePost(userId, postId)
-                    .then(() => res.status(204).send())
+                    .then(posts => res.json(posts))
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {
                 res.status(400).json({ error: error.message })
