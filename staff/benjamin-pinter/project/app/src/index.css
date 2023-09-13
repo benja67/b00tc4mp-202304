@@ -56,10 +56,11 @@ button {
 }
 
 .posts {
-  margin: 60px 10px;
+  margin: 50px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: blue; 
 }
 
 .fav-posts {
@@ -80,12 +81,22 @@ button {
   color:orange;
 }
 
+.post-title {
+  color:red;
+}
+
+.buy-button {
+  background-color:rgb(13, 255, 0);
+  font-size: 50px;
+}
+
 .post {
-  border: 1px solid black;
+  border: 5px solid red;
   border-radius: 10px;
   margin: 10px;
   padding: 10px;
-  max-width: 450px;
+  max-width: 600px;
+  background-color: WHITE;
 }
 
 .post-form {
@@ -93,8 +104,17 @@ button {
   padding: 10px;
 }
 
+.charge-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: aqua;
+  font-size: 150%;
+}
+
 .post-image {
-  width: 100px;
+  width: 500px;
 }
 
 .balance {

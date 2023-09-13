@@ -17,8 +17,7 @@ function createPost(userId, image, text) {
             const post = {
                 author: userObjectId,
                 image,
-                text,
-                date: new Date
+                text
             }
 
             return posts.insertOne(post)

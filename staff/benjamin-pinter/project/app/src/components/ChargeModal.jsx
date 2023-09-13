@@ -1,3 +1,5 @@
+import chargeBalance from "../logic/chargeBalance"
+import context from '../context'
 
 function ChargeModal(props) {
     console.log('ChargeModal -> render')
@@ -11,13 +13,27 @@ function ChargeModal(props) {
     const handleSubmit = event => {
         event.preventDefault()
 
-        props.onCharged()
+        const additional = event.target.changeCharge.value
+
+        try {
+            chargeBalance(context.token, additional, error => {
+                if (error) {
+                    alert(error.message)
+
+                    return
+                }
+
+                props.onCharged()
+            })
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
     return <div className="modal charge-modal">
         <form className="charge-form" onSubmit={handleSubmit}>
-            <p className='charge-modul-text'>Enter the amount of money you want to charge your account with!</p>
-            <textarea className="charge-amount"></textarea>
+            <label htmlFor="changeCharge">Enter the amount of money you want to charge your account with!</label>
+            <input type="number" name="changeCharge" id="changeCharge"></input>
             <button type="submit">🚀</button>
             <button className="cancel-button" onClick={handleCancel}>❌</button>
         </form>

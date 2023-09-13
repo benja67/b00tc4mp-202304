@@ -6,6 +6,7 @@ import EditPostModal from '../components/EditPostModal'
 import DeletePostModal from '../components/DeletePostModal'
 import CashoutModal from '../components/CashoutModal'
 import ChargeModal from '../components/ChargeModal'
+import SpinModal from '../components/SpinModal'
 import context from '../context'
 import { extractUserIdFromToken } from '../helpers'
 
@@ -148,7 +149,6 @@ function Home(props) {
 
     const handleOpenCashoutModal = userId => {
         setModal('cashout-balance')
-        setUser(userId)
     }
 
 
@@ -158,7 +158,7 @@ function Home(props) {
 
     const handleCashedout = () => {
         try {
-            retrieveBalance(context.token, (error, balance) => {
+            retrieveBalance(context.token, (error, users) => {
                 if (error) {
                     alert(error.message)
 
@@ -176,7 +176,6 @@ function Home(props) {
 
     const handleOpenChargeModal = userId => {
         setModal('charge-balance')
-        setUser(userId)
     }
 
     const handleCancelCharge = () => {
@@ -185,7 +184,7 @@ function Home(props) {
 
     const handleCharged = () => {
         try {
-            retrieveBalance(context.token, (error, balance) => {
+            retrieveBalance(context.token, (error, users) => {
                 if (error) {
                     alert(error.message)
 
@@ -201,6 +200,18 @@ function Home(props) {
         }
     }
 
+    const handleOpenSpinModal = () => {
+        setModal('spin')
+    }
+
+    const handleSpinned = () => {
+        setAll(posts)
+        setView('all')
+        setModal(null)
+
+    }
+    
+
     return <div className="home-page">
         <header className="home-header">
             <h1 className="home-title">🍀Good Luck, {user ? user.name : 'World'}!🍀</h1>
@@ -213,10 +224,10 @@ function Home(props) {
         {view === 'all' && <main className="posts">
             {all.map(post => {
                 return <article key={post.id} className="post">
-                    <h2>{post.author.name}</h2>
+                    <h2 className='post-title'>{post.author.name}</h2>
                     <img src={post.image} className="post-image" />
                     <p>{post.text}</p>
-                    <time>{post.date.toString()}</time>
+                    <button className='buy-button' onClick={handleOpenSpinModal}>SPIN FOR 1€ 🎰</button>
                     {userId === post.author.id && <>
                         <button onClick={() => handleOpenEditPostModal(post.id)}>📝</button>
                         <button onClick={() => handleOpenDeletePostModal(post.id)}>🗑️</button>
@@ -238,6 +249,8 @@ function Home(props) {
         {modal === 'cashout-balance' && <CashoutModal onCancel={handleCancelCashout} onCashedout={handleCashedout} />}
 
         {modal === 'charge-balance' && <ChargeModal onCancel={handleCancelCharge} onCharged={handleCharged} />}
+
+        {modal === 'spin' && <SpinModal onSpinned={handleSpinned} />}
 
         <div className="audio-home off">
             <audio src="public/home.mp3" controls autoPlay loop>

@@ -9,6 +9,8 @@ const retrievePosts = require('./logic/retrievePosts')
 const retrievePost = require('./logic/retrievePost')
 const updatePost = require('./logic/updatePost')
 const deletePost = require('./logic/deletePost')
+const chargeBalance = require('./logic/chargeBalance')
+const spinGamble = require('./logic/spinGamble')
 const cors = require('cors')
 const mongodb = require('mongodb')
 const context = require('./logic/context')
@@ -153,6 +155,45 @@ client.connect()
                 const { image, text } = req.body
 
                 updatePost(userId, postId, image, text)
+                    .then(() => res.status(204).send())
+                    .catch(error => res.status(400).json({ error: error.message }))
+            } catch (error) {
+                res.status(400).json({ error: error.message })
+            }
+        })
+
+        api.patch('/users/charge', jsonBodyParser, (req, res) => {
+            try {
+                const { authorization } = req.headers
+
+                const token = authorization.slice(7)
+
+                const payload = jwt.verify(token, process.env.SECRET)
+                const { sub: userId } = payload
+
+                const { additional } = req.body
+
+                chargeBalance(userId, additional)
+                    .then(() => res.status(204).send())
+                    .catch(error => res.status(400).json({ error: error.message }))
+            } catch (error) {
+                res.status(400).json({ error: error.message })
+            }
+        })
+
+
+        api.patch('/users/spin', jsonBodyParser, (req, res) => {
+            try {
+                const { authorization } = req.headers
+
+                const token = authorization.slice(7)
+
+                const payload = jwt.verify(token, process.env.SECRET)
+                const { sub: userId } = payload
+
+                const {  } = req.body
+
+                spinGamble(userId)
                     .then(() => res.status(204).send())
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {
