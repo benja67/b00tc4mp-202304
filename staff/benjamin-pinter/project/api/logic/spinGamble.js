@@ -13,7 +13,7 @@ function spinGamble(userId) {
             if (user.balance <= 0) throw Error('not enough money')
             const balance = user.balance - 1
 
-            return users.updateOne({ balance })
+            return users.updateOne({ _id: userObjectId }, {$set:{ balance }})
         })
         .then(() => { })
 }

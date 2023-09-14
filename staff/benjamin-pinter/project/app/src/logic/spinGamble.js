@@ -34,11 +34,7 @@ function spinGamble(token, callback) {
 
     xhr.setRequestHeader('Content-Type', 'application/json')
 
-    const body = { }
-
-    const json = JSON.stringify(body)
-
-    xhr.send(json)
+    xhr.send()
 }
 
 export default spinGamble

@@ -182,7 +182,7 @@ client.connect()
         })
 
 
-        api.patch('/users/spin', jsonBodyParser, (req, res) => {
+        api.patch('/users/spin', (req, res) => {
             try {
                 const { authorization } = req.headers
 
@@ -190,8 +190,6 @@ client.connect()
 
                 const payload = jwt.verify(token, process.env.SECRET)
                 const { sub: userId } = payload
-
-                const {  } = req.body
 
                 spinGamble(userId)
                     .then(() => res.status(204).send())

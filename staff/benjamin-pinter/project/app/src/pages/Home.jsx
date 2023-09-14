@@ -184,14 +184,14 @@ function Home(props) {
 
     const handleCharged = () => {
         try {
-            retrieveBalance(context.token, (error, users) => {
+            retrieveUser(context.token, (error, user) => {
                 if (error) {
                     alert(error.message)
 
                     return
                 }
 
-                setAll(posts)
+                setUser(user)
                 setView('all')
                 setModal(null)
             })
@@ -205,12 +205,22 @@ function Home(props) {
     }
 
     const handleSpinned = () => {
-        setAll(posts)
-        setView('all')
-        setModal(null)
+        try {
+            retrieveUser(context.token, (error, user) => {
+                if (error) {
+                    alert(error.message)
 
+                    return
+                }
+
+                setUser(user)
+                setView('all')
+                setModal(null)
+            })
+        } catch (error) {
+            alert(error.message)
+        }
     }
-    
 
     return <div className="home-page">
         <header className="home-header">

@@ -13,7 +13,7 @@ function ChargeModal(props) {
     const handleSubmit = event => {
         event.preventDefault()
 
-        const additional = event.target.changeCharge.value
+        const additional = Number(event.target.changeCharge.value)
 
         try {
             chargeBalance(context.token, additional, error => {

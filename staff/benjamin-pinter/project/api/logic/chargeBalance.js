@@ -13,9 +13,8 @@ function chargeBalance(userId, additional) {
             if (!user) throw new Error('user not found')
 
             const newBalance = user.balance + additional
-            additional = newBalance
 
-            return users.chargeBalance({ _id: userObjectId }, { $set: { additional } })
+            return users.updateOne({ _id: userObjectId }, { $set: { balance: newBalance } })
         })
         .then(() => { })
 }
