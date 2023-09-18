@@ -49,7 +49,7 @@ function Login(props) {
 
         <a href="" onClick={hangleGoToRegister}>Register</a>
 
-        <img src="public/login.jpeg" alt="login" width="400" height="400"></img>
+        <img src="public/login.jpeg" alt="login" width="500" height="500"></img>
         <div className="audio-login off">
             <audio src="public/logins.mp3" controls autoPlay loop>
             Your browser does not support the audio element.

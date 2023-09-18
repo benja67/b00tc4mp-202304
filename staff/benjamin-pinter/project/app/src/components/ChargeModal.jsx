@@ -34,7 +34,7 @@ function ChargeModal(props) {
         <form className="charge-form" onSubmit={handleSubmit}>
             <label htmlFor="changeCharge">Enter the amount of money you want to charge your account with!</label>
             <input type="number" name="changeCharge" id="changeCharge"></input>
-            <button type="submit">🚀</button>
+            <button className="submit-button" type="submit">🚀</button>
             <button className="cancel-button" onClick={handleCancel}>❌</button>
         </form>
     </div>

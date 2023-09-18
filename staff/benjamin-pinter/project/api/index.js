@@ -10,6 +10,7 @@ const retrievePost = require('./logic/retrievePost')
 const updatePost = require('./logic/updatePost')
 const deletePost = require('./logic/deletePost')
 const chargeBalance = require('./logic/chargeBalance')
+const cashout = require('./logic/cashout')
 const spinGamble = require('./logic/spinGamble')
 const cors = require('cors')
 const mongodb = require('mongodb')
@@ -174,6 +175,25 @@ client.connect()
                 const { additional } = req.body
 
                 chargeBalance(userId, additional)
+                    .then(() => res.status(204).send())
+                    .catch(error => res.status(400).json({ error: error.message }))
+            } catch (error) {
+                res.status(400).json({ error: error.message })
+            }
+        })
+
+        api.patch('/users/cashout', jsonBodyParser, (req, res) => {
+            try {
+                const { authorization } = req.headers
+
+                const token = authorization.slice(7)
+
+                const payload = jwt.verify(token, process.env.SECRET)
+                const { sub: userId } = payload
+
+                const { amount } = req.body
+
+                cashout(userId, amount)
                     .then(() => res.status(204).send())
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {

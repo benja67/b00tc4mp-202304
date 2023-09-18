@@ -1,8 +1,9 @@
 const context = require('./context')
 const { ObjectId } = require('mongodb')
 
-function spinGamble(userId) { // TODO add lootboxId
+function cashout(userId, amount) {
     if (typeof userId !== 'string') throw new Error('userId is not a string')
+    if (typeof amount !== 'number') throw new Error('amount is not a number')
     const { users } = context
 
     const userObjectId = new ObjectId(userId)
@@ -10,14 +11,13 @@ function spinGamble(userId) { // TODO add lootboxId
     return users.findOne({ _id: userObjectId })
         .then(user => {
             if (!user) throw new Error('user not found')
-            if (user.balance <= 0) throw Error('not enough money')
-            const balance = user.balance - 1
+            if (amount > user.balance) throw Error('not enough money')
 
-            // TODO gambling weighted by the lookbox price
+            const newBalance = user.balance - amount
 
-            return users.updateOne({ _id: userObjectId }, {$set:{ balance }})
+            return users.updateOne({ _id: userObjectId }, { $set: { balance: newBalance } })
         })
         .then(() => { })
 }
 
-module.exports = spinGamble
+module.exports = cashout

@@ -158,14 +158,14 @@ function Home(props) {
 
     const handleCashedout = () => {
         try {
-            retrieveBalance(context.token, (error, users) => {
+            retrieveUser(context.token, (error, user) => {
                 if (error) {
                     alert(error.message)
 
                     return
                 }
 
-                setAll(posts)
+                setUser(user)
                 setView('all')
                 setModal(null)
             })
@@ -202,6 +202,10 @@ function Home(props) {
 
     const handleOpenSpinModal = () => {
         setModal('spin')
+    }
+
+    const handleCancelSpin = () => {
+        setModal(null)
     }
 
     const handleSpinned = () => {
@@ -247,7 +251,8 @@ function Home(props) {
         </main>}
 
         <footer className="home-footer">
-            <button className="create-post-button" onClick={handleOpenCreatePostModal}>+</button>
+            {/* <button className="create-post-button" onClick={handleOpenCreatePostModal}>+</button> */}
+            <marquee>🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱🤑🚀📈💶🅿️🏎️💨⭐️🐬✅🛵🏃🍀🎰💰🌀🏚️🎨🔑🛒❌🏦🥇🇦🇱</marquee>
         </footer>
 
         {modal === 'create-post' && <CreatePostModal onCancel={handleCancelCreatePost} onCreated={handlePostCreated} />}
@@ -260,7 +265,7 @@ function Home(props) {
 
         {modal === 'charge-balance' && <ChargeModal onCancel={handleCancelCharge} onCharged={handleCharged} />}
 
-        {modal === 'spin' && <SpinModal onSpinned={handleSpinned} />}
+        {modal === 'spin' && <SpinModal onCancel={handleCancelSpin} onSpinned={handleSpinned} />}
 
         <div className="audio-home off">
             <audio src="public/home.mp3" controls autoPlay loop>

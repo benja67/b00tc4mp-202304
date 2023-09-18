@@ -1,3 +1,6 @@
+import cashout from "../logic/cashout"
+import context from '../context'
+
 function CashoutModal(props) {
     console.log('CashoutModal -> render')
 
@@ -10,14 +13,28 @@ function CashoutModal(props) {
     const handleSubmit = event => {
         event.preventDefault()
 
-        props.onCashedout()
+        const amount = Number(event.target.changeCashout.value)
+
+        try {
+            cashout(context.token, amount, error => {
+                if (error) {
+                    alert(error.message)
+
+                    return
+                }
+
+                props.onCashedout()
+            })
+        } catch (error) {
+            alert(error.message)
+        }
     }
 
     return <div className="modal cashout-modal">
         <form className="cashout-form" onSubmit={handleSubmit}>
-            <p className='cashout-modul-text'>How much money do you want to withdraw?</p>
-            <textarea className="cashout-amount"></textarea>
-            <button type="submit">💰</button>
+            <label htmlFor="changeCashout">Enter the amount of money you want to withdraw!</label>
+            <input type="number" name="changeCashout" id="changeCashout"></input>
+            <button className="submit-button" type="submit">🚀</button>
             <button className="cancel-button" onClick={handleCancel}>❌</button>
         </form>
     </div>
