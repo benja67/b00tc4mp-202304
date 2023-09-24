@@ -15,8 +15,6 @@ function retrievePost(userId, postId) {
             if (!user) throw new Error('user not found')
             if (!post) throw new Error('post not found')
 
-            if (post.author.toString() !== userId) throw new Error('post does not belong to user')
-
             delete post._id
 
             delete post.author

@@ -1,5 +1,6 @@
-function spinGamble(token, callback) {
+function spinGamble(token, postId, callback) {
     if (typeof token !== 'string') throw new Error('token is not a string')
+    if (typeof postId !== 'string') throw new Error('postId is not a string')
     if (typeof callback !== 'function') throw new Error('callback is not a function')
 
     const xhr = new XMLHttpRequest
@@ -28,7 +29,7 @@ function spinGamble(token, callback) {
 
     // req
 
-    xhr.open('PATCH', `http://localhost:8080/users/spin`)
+    xhr.open('PATCH', `http://localhost:8080/users/spin/${postId}`)
 
     xhr.setRequestHeader('Authorization', `Bearer ${token}`)
 

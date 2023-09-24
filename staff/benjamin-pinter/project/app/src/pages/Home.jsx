@@ -200,8 +200,9 @@ function Home(props) {
         }
     }
 
-    const handleOpenSpinModal = () => {
+    const handleOpenSpinModal = postId => {
         setModal('spin')
+        setPostId(postId)
     }
 
     const handleCancelSpin = () => {
@@ -241,7 +242,7 @@ function Home(props) {
                     <h2 className='post-title'>{post.author.name}</h2>
                     <img src={post.image} className="post-image" />
                     <p>{post.text}</p>
-                    <button className='buy-button' onClick={handleOpenSpinModal}>SPIN FOR 1€ 🎰</button>
+                    <button className='buy-button' onClick={() => handleOpenSpinModal(post.id)}>SPIN FOR 1€ 🎰</button>
                     {userId === post.author.id && <>
                         <button onClick={() => handleOpenEditPostModal(post.id)}>📝</button>
                         <button onClick={() => handleOpenDeletePostModal(post.id)}>🗑️</button>
@@ -265,7 +266,7 @@ function Home(props) {
 
         {modal === 'charge-balance' && <ChargeModal onCancel={handleCancelCharge} onCharged={handleCharged} />}
 
-        {modal === 'spin' && <SpinModal onCancel={handleCancelSpin} onSpinned={handleSpinned} />}
+        {modal === 'spin' && <SpinModal postId={postId} onCancel={handleCancelSpin} onSpinned={handleSpinned} />}
 
         <div className="audio-home off">
             <audio src="public/home.mp3" controls autoPlay loop>

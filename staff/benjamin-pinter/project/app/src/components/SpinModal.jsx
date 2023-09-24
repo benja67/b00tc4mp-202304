@@ -1,8 +1,24 @@
+import { useState, useEffect } from 'react'
+import retrievePost from '../logic/retrievePost' 
 import spinGamble from "../logic/spinGamble"
 import context from '../context'
 
 function SpinModal(props) {
     console.log('SpinModal -> render')
+
+    useEffect(() => {
+        try {
+            retrievePost(context.token, props.postId, (error, post) => {
+                if (error) {
+                    alert(error.message)
+
+                    return
+                }
+            })
+        } catch (error) {
+            alert(error.message)
+        }
+    }, [])
 
     const handleCancel = event => {
         event.preventDefault()
@@ -14,7 +30,7 @@ function SpinModal(props) {
         event.preventDefault()
 
         try {
-            spinGamble(context.token, error => {
+            spinGamble(context.token, props.postId, error => {
                 if (error) {
                     alert(error.message)
 

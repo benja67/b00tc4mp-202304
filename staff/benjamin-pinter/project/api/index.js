@@ -202,7 +202,7 @@ client.connect()
         })
 
 
-        api.patch('/users/spin', (req, res) => {
+        api.patch('/users/spin/:postId', (req, res) => {
             try {
                 const { authorization } = req.headers
 
@@ -211,7 +211,9 @@ client.connect()
                 const payload = jwt.verify(token, process.env.SECRET)
                 const { sub: userId } = payload
 
-                spinGamble(userId)
+                const postId = req.params.postId
+
+                spinGamble(userId, postId)
                     .then(() => res.status(204).send())
                     .catch(error => res.status(400).json({ error: error.message }))
             } catch (error) {
